@@ -31,6 +31,16 @@ def as_uni_field(field):
     template = get_template('uni_form/field.html')
     c = Context({'field':field})
     return template.render(c)
+    
+@register.inclusion_tag("uni_form/includes.html", takes_context=True)
+def uni_form_setup(context):
+    """
+Creates the <style> and <script> tags needed to initialize the uni-form.
+ 
+Create a local uni-form/includes.html template if you want to customize how
+these files are loaded. 
+"""
+    return {}
 
 ############################################################################
 #
@@ -74,7 +84,7 @@ class BasicNode(template.Node):
         if attrs:
             form_method = attrs.get("form_method", 'POST')
             form_action = attrs.get("form_action", '')
-            form_class = attrs.get("form_class", '')
+            form_class = attrs.get("class", '')
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
             toggle_fields = attrs.get('toggle_fields', set(()))
@@ -124,7 +134,10 @@ def do_uni_form(parser, token):
     attrs (optional): A string of semi-colon seperated attributes that can be
     applied to theform in string format. They are used as follows.
     
-    form_action: applied to the form action attribute. Must be a named url in your urlconf that can be executed via the *url* default template tag. Defaults to empty::
+    form_action: applied to the form action attribute. Can be a named url in 
+    your urlconf that can be executed via the *url* default template tag or can
+    simply point to another URL. 
+    Defaults to empty::
         
         form_action=<my-form-action>
     

@@ -108,7 +108,7 @@ class Fieldset(object):
             self.css = args['css_class']
         else:
             self.css = None
-        self.legend_html = legend and ('<legend>%s</legend><hr/>' % unicode(legend)) or ''
+        self.legend_html = legend and ('<legend>%s</legend>' % unicode(legend)) or ''
         self.fields = fields
     
     
@@ -194,7 +194,7 @@ class FormHelper(object):
         
         After this in the template:
             
-            {% load uni_form %}
+            {% load uni_form_tags %}
             {% uni_form form form.helper %}
         
     
@@ -228,11 +228,12 @@ class FormHelper(object):
     def set_form_action(self, action):
         try:
             self._form_action = reverse(action)
-        except NoReverseMatch, e:
-            msg = 'Your form action needs to be a named url defined in a urlconf file\n'
-            msg += 'Your broken action is: %s\n' % action
-            msg += 'NoReverseMatch: %s' % e
-            raise FormHelpersException(msg)
+        except NoReverseMatch:
+            self._form_action = action
+            #msg = 'Your form action needs to be a named url defined in a urlconf file\n'
+            #msg += 'Your broken action is: %s\n' % action
+            #msg += 'NoReverseMatch: %s' % e
+            #raise FormHelpersException(msg)
     
     # we set properties the old way because we want to support pre-2.6 python
     form_action = property(get_form_action, set_form_action)
