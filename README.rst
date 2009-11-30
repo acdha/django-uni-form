@@ -10,13 +10,24 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
+**Note:** Django Uni-Form 0.7 breaks backwards compatibility with previous versions of Django Uni-Form. See ``Updating legacy Django Uni-Form to 0.7``. All you have to do is update templates that call on the Django Uni-Form template tag from::
+
+    {% load uni_form %}
+    
+To::
+
+    {% load uni_form_tags %}
+
+Installation
+============
+
 Installing django-uni-form
-============================
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Install into your python path using pip or easy_install::
 
     pip install django-uni-form
-    easy_install install django-uni-form    
+    easy_install django-uni-form    
     
 Add *'uni_form'* to your INSTALLED_APPS in settings.py::
 
@@ -33,14 +44,14 @@ media folder::
     cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form.jquery.js <my-project>/media/uni_form/uni-form.jquery.js    
     
 Displaying the media files
-==========================
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Django Uni-Form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways:
 
 1. Manually by copying the HTML into your own templates::
 
-    <link rel="stylesheet" href="{{ MEDIA_URL }}uni-form/uni-form-generic.css" type="text/css" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}uni-form/uni-form.css" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form-generic.css" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
     <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
 
 2. Via use of the Django **includes** built-in template tag.
@@ -57,10 +68,27 @@ If you want to take advantage of the uni_form_setup tag, then you'll need to mak
         ...
         'django.core.context_processors.request',
         )
+        
+Customizations on '*' required fields (optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+If you don't like the use of '*' (asterisk) to denote required fields you can simply overrride the Django Uni-Form field.html. In your Django project's templates directory create a new directory called `uni_form`. Copy the Django Uni-Form field.html file to that directory and make the desired changes. For example::
+
+    cd ~/<my-projects>/<my-awesome-django-project>/templates/
+    mkdir uni_form
+    cd uni_form/
+    cp <my-site-packages>/Django-uni-form/uni_form/templates/field.html .
+    
+Now you could change the asterisk to any other character, an image icon, or whatever else you want.
+
+
+----
+
+Usage
+=====
 
 Using the django-uni-form filter (Easy and fun!)
-=================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
@@ -73,7 +101,7 @@ Using the django-uni-form filter (Easy and fun!)
 4. Refresh and enjoy!
 
 Using the django-uni-form templatetag in your view (Intermediate)
-====================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your views.py add the following after field definitions::
 
     from django.shortcuts import render_to_response
@@ -110,10 +138,8 @@ Using the django-uni-form templatetag in your view (Intermediate)
     
     {% uni_form form helper %}
 
-
-
 Using the django-uni-form templatetag in your form class (Intermediate)
-========================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your form class add the following after field definitions::
 
     from uni_form.helpers import FormHelper, Submit, Reset
@@ -142,7 +168,7 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
     
 Using the django-uni-form templatetag to change action/method (Intermediate)
-============================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your form class add the following after field definitions::
 
     from uni_form.helpers import FormHelper, Submit
@@ -171,7 +197,7 @@ Using the django-uni-form templatetag to change action/method (Intermediate)
 
 
 Adding a layout to your form class (Intermediate)
-==================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
 
@@ -231,7 +257,6 @@ Then, just like in the previous example, add the following to your template::
            
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
-
 
 .. _Django: http://djangoproject.com
 .. _`Uni-form`: http://sprawsm.com/uni-form
